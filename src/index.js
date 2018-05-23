@@ -1,56 +1,37 @@
-const { GraphQLServer } = require('graphql-yoga')
+const { GraphQLServer } = require('graphql-yoga');
+const { Prisma } = require('prisma-binding');touch
 
-
-let links = [{
-  id: 'link-0',
-  url: 'www.howtographql.com',
-  description: 'Fullstack tutorial for GraphQL'
-}]
-
-let idCount = links.length;
 
 const resolvers = {
-
   Query: {
-    info: () => "This is the API of a Hackernews Clone",
-    feed: () => links, 
-    link: (root, args) => {
-      const id = args.id;
-      return links.filter(link => {
-        return link.id == id;
-      })[0];
-    }
+    info: () => `This is the API of a Hackernews Clone`,
+    feed: (root, args, context, info) => {
+      return context.db.query.links({}, info)
+    },
   },
   Mutation: {
-    createLink: (root, args) => {
-      const link = {
-        id: `link-${idCount++}`,
-        description: args.description,
-        url: args.url
-      }
-      links.push(link);
-      return link;
+    post: (root, args, context, info) => {
+      return context.db.mutation.createLink({
+        data: {
+          url: args.url,
+          description: args.description,
+        },
+      }, info)
     },
-    updateLink: (root, args) => {
-      const { id, url, description } = args;
-      let link = links.filter(link => link.id == id)[0];
-      if (url) link.url = url;
-      if (description) link.description = description;
-      return link;
-    },
-    deleteLink: (root, args) => {
-      const id = args.id;
-      const linkIndex = links.findIndex(link => link.id == id);
-      const linkCopy = {...links[linkIndex]};
-      links.splice(linkIndex,1);
-      return linkCopy;
-    }
-  }
+  },
 }
 
 
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
-});
-server.start(() => console.log("Server is running on http://localhost:4000"));
+  context: req => ({
+    ...req,
+    db: new Prisma({
+      typeDefs: 'src/generated/prisma.graphql',
+      endpoint: 'https://us1.prisma.sh/public-shoresinger-40/hackernews-node-graphql/dev',
+      secret: 'mysecret123',
+      debug: true,
+    }),
+  }),
+})
