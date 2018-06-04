@@ -1,17 +1,23 @@
-# import Link from "./generated/prisma.graphql"
+# import Link, LinkSubscriptionPayload from "./generated/prisma.graphql" 
 
 type Query {
   info: String!
-  # read all links
-  feed: [Link!]!
-  # read a single link by its 'id'
-  link(id: ID!): Link
+  feed(filter: String, skip: Int, first: Int, orderBy: LinkOrderByInput): Feed!
+}
+
+type Feed {
+  links: [Link!]!
+  count: Int!
 }
 
 type Mutation {
   post(url: String!, description: String!): Link!
   signup(email: String!, password: String!, name: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
+}
+
+type Subscription {
+  newLink: LinkSubscriptionPayload
 }
 
 type AuthPayload {

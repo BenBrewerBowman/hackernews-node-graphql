@@ -4,7 +4,10 @@
   "description": "This is an API for a Hacker News clone.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/index.js",
+    "dev": "npm-run-all --parallel start playground",
+    "playground": "graphql playground",
+    "prisma": "prisma"
   },
   "repository": {
     "type": "git",
@@ -19,8 +22,12 @@
   "homepage": "https://github.com/BenBrewerBowman/hackernews-node-graphql#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "graphql-yoga": "^1.14.1",
-    "jsonwebtoken": "^8.2.2",
-    "prisma-binding": "^2.0.1"
+    "graphql-yoga": "^1.7.0",
+    "jsonwebtoken": "^8.2.0",
+    "prisma-binding": "^1.5.16"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.2",
+    "prisma": "1.6.3"
   }
 }
