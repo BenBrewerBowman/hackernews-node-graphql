@@ -1,25 +1,27 @@
-  type Query {
-    info: String!
-    # read all links
-    feed: [Link!]!
-    # read a single link by its 'id'
-    link(id: ID!): Link
-  }
+# import Link from "./generated/prisma.graphql"
 
-  type Mutation {
+type Query {
+  info: String!
+  # read all links
+  feed: [Link!]!
+  # read a single link by its 'id'
+  link(id: ID!): Link
+}
 
-    # create link
-    createLink(url: String!, description: String!): Link!
+type Mutation {
+  post(url: String!, description: String!): Link!
+  signup(email: String!, password: String!, name: String!): AuthPayload
+  login(email: String!, password: String!): AuthPayload
+}
 
-    # update link
-    updateLink(id: ID!, url: String, description: String): Link
+type AuthPayload {
+  token: String
+  user: User
+}
 
-    # delete link
-    deleteLink(id: ID!): Link
-  }
-
-  type Link {
-    id: ID!
-    description: String!
-    url: String!
-  }
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  links: [Link!]!
+}
