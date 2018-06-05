@@ -1,7 +1,5 @@
 # GraphQL Node Tutorial
 
-An API for a Hacker News clone. 
-
 This includes the following technologies:
 - GraphQL Yoga: Fully-featured GraphQL server on top of ExpressJS.
 - Prisma: GraphQL database proxy that turns your database into a GraphQL API with powerful, realtime CRUD operations.
