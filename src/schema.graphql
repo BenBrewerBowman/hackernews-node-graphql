@@ -2,7 +2,7 @@
 
 type Query {
   info: String!
-  feed(filter: String, skip: Int, first: Int, orderBy: LinkOrderByInput): Feed!
+  feed(filter: String): [Link!]!
 }
 
 type Feed {
