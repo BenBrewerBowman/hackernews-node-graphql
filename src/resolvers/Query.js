@@ -8,8 +8,12 @@ function feed(parent, args, context, info) {
           { description_contains: args.filter }
         ]
       }
-    : {}
-  return context.db.query.links({ where }, info)
+    : {};
+
+  return context.db.query.links(
+    { where, skip: args.skip, first: args.first }, 
+    info
+  );
 }
 
 module.exports = {
