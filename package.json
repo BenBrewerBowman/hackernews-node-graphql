@@ -12,9 +12,15 @@
     "react-scripts": "1.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "npm-run-all --parallel server client",
+    "server": "cd server && npm start",
+    "client": "npm start",
     "build": "react-scripts build",
+    "start": "react-scripts start",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.3"
   }
 }
