@@ -1,32 +1,26 @@
-const { GraphQLServer } = require('graphql-yoga');
-const { Prisma } = require('prisma-binding');
-const Query = require('./resolvers/Query');
-const Mutation = require('./resolvers/Mutation');
-const AuthPayload = require('./resolvers/AuthPayload');
-const Subscription = require('./resolvers/Subscription');
-const Feed = require('./resolvers/Feed');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './styles/index.css';
+import App from './components/App';
+import registerServiceWorker from './registerServiceWorker';
+import { ApolloProvider } from 'react-apollo';
+import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
 
-const resolvers = {
-  Query,
-  Mutation,
-  AuthPayload,
-  Subscription,
-  Feed
-}
+const httpLink = new HttpLink({ uri: 'http://localhost:4000'});
 
-
-const server = new GraphQLServer({
-  typeDefs: './src/schema.graphql',
-  resolvers,
-  context: req => ({
-    ...req,
-    db: new Prisma({
-      typeDefs: './src/generated/prisma.graphql',
-      endpoint: 'https://us1.prisma.sh/public-shoresinger-40/hackernews-node-graphql/dev',
-      secret: 'mysecret123',
-      debug: true,
-    }),
-  }),
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache()
 });
-server.start(() => console.log(`Server is running on http://localhost:4000`))
+
+ReactDOM.render(
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>
+  document.getElementById('root')
+);
+
+registerServiceWorker();
